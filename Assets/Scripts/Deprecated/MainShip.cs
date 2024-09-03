@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MainShip : MonoBehaviour
@@ -47,4 +47,4 @@ public class MainShip : MonoBehaviour
         MoveShip();
         RotateShip();
     }
-}
+}*/

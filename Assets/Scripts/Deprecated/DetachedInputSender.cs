@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using Unity.Entities;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
@@ -17,26 +17,28 @@ internal class InputCreator
     }
 }
 
-
-public class DetachedInputSender
+[UpdateInGroup(typeof(InitializationSystemGroup))]
+[UpdateAfter(typeof(EndInitializationEntityCommandBufferSystem))]
+public partial class DetachedInputSender : SystemBase
 {
     private static InputCreator inputCreator;
     public static UnityAction<InputAction.CallbackContext> WasdInputAction;
     public static UnityAction SpaceInputAction;
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void InitializeInput()
-    {
+    protected override void OnStartRunning() {
         inputCreator = new InputCreator();
         inputCreator.mapper.Enable();
-    }
-    
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void SendInput()
-    {
-        inputCreator.mapper.Player.WASD.performed += ctx =>WasdInputAction?.Invoke(ctx);
+        
+        inputCreator.mapper.Player.WASD.performed += ctx => WasdInputAction?.Invoke(ctx);
         inputCreator.mapper.Player.WASD.canceled += arg0 => WasdInputAction?.Invoke(arg0);
         
         inputCreator.mapper.Player.Space.performed += _ =>SpaceInputAction?.Invoke();
     }
-}
+
+    protected override void OnStopRunning() {
+        inputCreator.mapper.Disable();
+    }
+
+    protected override void OnUpdate() {
+    }
+}*/
