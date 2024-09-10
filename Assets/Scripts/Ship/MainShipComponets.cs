@@ -14,3 +14,7 @@ public struct MainShipRotationSpeed : IComponentData {
 public struct MainShipMoveInput : IComponentData {
     public float2 Value;
 }
+
+public struct MainShipMouseInput : IComponentData {
+    public float2 Value;
+}

@@ -122,7 +122,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &968449747
+--- !u!1001 &860142221
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -130,6 +130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1951040784114163946, guid: 3ed71ceca72ddce4fb0e30ad510b02e0, type: 3}
+      propertyPath: RotateSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5355458898155013775, guid: 3ed71ceca72ddce4fb0e30ad510b02e0, type: 3}
       propertyPath: m_Name
       value: My_Player
@@ -183,4 +187,4 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 968449747}
+  - {fileID: 860142221}

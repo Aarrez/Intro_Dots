@@ -1,6 +1,5 @@
 ﻿using Unity.Burst;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Transforms;
 
 namespace ECS_Lecture.Scripts.Player {

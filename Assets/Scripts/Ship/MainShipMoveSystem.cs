@@ -16,19 +16,25 @@ public partial struct MainShipMoveSystem : ISystem {
     }
 }
 
+[BurstCompile]
 public partial struct MainShipMoveJob : IJobEntity {
     
     public float DeltaTime;
 
+    [BurstCompile]
     private void Execute(ref LocalTransform transform,
         in MainShipMoveInput input,
+        in MainShipMouseInput mouse,
         MainShipMoveSpeed moveSpeed,
         MainShipRotationSpeed rotSpeed) {
+        
         transform.Position.xy += 
             input.Value * moveSpeed.Value * DeltaTime;
+        
         if (input.Value.Equals(float2.zero)) return;
-        quaternion lookRot = quaternion.LookRotation(
-                new float3(0, 1, 0), 
+        quaternion lookRot = 
+            quaternion.LookRotation(
+                transform.Forward(), 
                 new float3(input.Value.x, input.Value.y, 0));
         
         transform.Rotation = math.nlerp(

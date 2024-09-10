@@ -1,43 +1,37 @@
-﻿using ECS_Lecture.Scripts.Player;
-using Unity.Entities;
+﻿using Unity.Entities;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
 public partial class MainShipInputSystem : SystemBase {
     private InputActionMapper mapper;
-    private Vector2 movementInput;
     private Entity player;
     
-
     protected override void OnCreate() {
-       
-       
         RequireForUpdate<MainShipTag>();
-        RequireForUpdate<PlayerMoveInput>();
+        RequireForUpdate<MainShipMoveInput>();
         mapper = new InputActionMapper();
     }
 
     protected override void OnStartRunning() {
         mapper.Enable();
         
-        mapper.Player.Space.performed += _ => OnShoot();
-        mapper.Player.WASD.performed += ctx => {
-            movementInput = ctx.ReadValue<Vector2>();
-        };
-        mapper.Player.WASD.canceled += ctx => {
-            movementInput = ctx.ReadValue<Vector2>();
-        };
-        player = SystemAPI.GetSingletonEntity<PlayerTag>();
+        mapper.Player.Space.performed += OnShoot;
+        
+        player = SystemAPI.GetSingletonEntity<MainShipTag>();
     }
-    private void OnShoot() {
+    private void OnShoot(InputAction.CallbackContext context) {
         if (!SystemAPI.Exists(player)) return;
         
         SystemAPI.SetComponentEnabled<FireBulletTag>(
             player, true);
     }
 
-    protected override void OnUpdate() {
-        SystemAPI.SetSingleton(new PlayerMoveInput {
+    protected override void OnUpdate()
+    {
+        var movementInput = mapper.Player.WASD.ReadValue<Vector2>();
+        
+        SystemAPI.SetSingleton(new MainShipMoveInput() {
             Value = movementInput
         });
     }

@@ -7,12 +7,15 @@ public class MainShipAuthoring : MonoBehaviour {
     [SerializeField] private float MoveSpeed = 5f;
     [SerializeField] private float RotateSpeed = 90f;
 
-    public class MainShipBaker : Baker<MainShipAuthoring> {
+    public class MainShipAuthoringBaker : Baker<MainShipAuthoring> {
         public override void Bake(MainShipAuthoring authoring) {
 
             Entity ent = GetEntity(TransformUsageFlags.Dynamic);
 
             AddComponent<MainShipTag>(ent);
+            AddComponent<MainShipMoveInput>(ent);
+            AddComponent<MainShipMouseInput>(ent);
+            
             AddComponent(ent, new MainShipRotationSpeed {
                 Value = authoring.RotateSpeed
             });
