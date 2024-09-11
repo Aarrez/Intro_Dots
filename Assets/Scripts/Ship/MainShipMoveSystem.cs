@@ -13,6 +13,34 @@ public partial struct MainShipMoveSystem : ISystem {
         new MainShipMoveJob {
             DeltaTime = deltaTime
         }.Schedule();
+        new MainShipRotateJob {
+            DeltaTime = deltaTime
+        }.Schedule();
+    }
+}
+
+[BurstCompile]
+public partial struct MainShipRotateJob : IJobEntity {
+    
+    public float DeltaTime;
+
+    [BurstCompile]
+    private void Execute(ref LocalTransform transform,
+        in MainShipMouseInput mouseInput,
+        MainShipRotationSpeed speed) {
+        
+        if (mouseInput.Value.Equals(float2.zero)) return;
+        
+        float3 temp = new float3(mouseInput.Value.x, mouseInput.Value.y/2, 0);
+        float3 direction = temp - transform.Position;
+        quaternion lookRot = 
+            quaternion.LookRotation(
+                transform.Forward(), 
+                direction);
+        
+        transform.Rotation = math.nlerp(
+            transform.Rotation, lookRot
+            , speed.Value * DeltaTime);
     }
 }
 
@@ -24,21 +52,9 @@ public partial struct MainShipMoveJob : IJobEntity {
     [BurstCompile]
     private void Execute(ref LocalTransform transform,
         in MainShipMoveInput input,
-        in MainShipMouseInput mouse,
-        MainShipMoveSpeed moveSpeed,
-        MainShipRotationSpeed rotSpeed) {
+        MainShipMoveSpeed moveSpeed) {
         
         transform.Position.xy += 
             input.Value * moveSpeed.Value * DeltaTime;
-        
-        if (input.Value.Equals(float2.zero)) return;
-        quaternion lookRot = 
-            quaternion.LookRotation(
-                transform.Forward(), 
-                new float3(input.Value.x, input.Value.y, 0));
-        
-        transform.Rotation = math.nlerp(
-            transform.Rotation, lookRot
-            , rotSpeed.Value * DeltaTime);
     }
 }

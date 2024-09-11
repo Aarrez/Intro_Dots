@@ -123,7 +123,7 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
                     ""name"": ""Mouse Pos"",
                     ""type"": ""Value"",
                     ""id"": ""19b12cdb-a5fa-4e6c-aa82-4a86ce11cec1"",
-                    ""expectedControlType"": ""Delta"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -151,7 +151,7 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8128a2ed-9772-4059-9436-2fa9d6f70c31"",
-                    ""path"": ""<Mouse>/delta"",
+                    ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",

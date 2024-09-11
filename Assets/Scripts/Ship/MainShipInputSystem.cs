@@ -17,9 +17,29 @@ public partial class MainShipInputSystem : SystemBase {
         mapper.Enable();
         
         mapper.Player.Space.performed += OnShoot;
+
+        mapper.Player.WASD.performed += OnMove;
+        mapper.Player.WASD.canceled += OnMove;
+
+        mapper.UI.MousePos.performed += OnMousePosChanged;
         
         player = SystemAPI.GetSingletonEntity<MainShipTag>();
     }
+
+    private void OnMove(InputAction.CallbackContext ctx) {
+        SystemAPI.SetSingleton(new MainShipMoveInput {
+            Value = ctx.ReadValue<Vector2>()
+        });
+    }
+
+    private void OnMousePosChanged(InputAction.CallbackContext ctx) {
+        Vector2 temp = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
+            
+        SystemAPI.SetSingleton(new MainShipMouseInput {
+            Value = temp
+        });
+    }
+    
     private void OnShoot(InputAction.CallbackContext context) {
         if (!SystemAPI.Exists(player)) return;
         
@@ -29,14 +49,12 @@ public partial class MainShipInputSystem : SystemBase {
 
     protected override void OnUpdate()
     {
-        var movementInput = mapper.Player.WASD.ReadValue<Vector2>();
-        
-        SystemAPI.SetSingleton(new MainShipMoveInput() {
-            Value = movementInput
-        });
     }
 
     protected override void OnStopRunning() {
+        mapper.Player.WASD.performed -= OnMove;
+        mapper.Player.WASD.canceled -= OnMove;
+        
         mapper.Disable();
         player = Entity.Null;
     }

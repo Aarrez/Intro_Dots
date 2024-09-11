@@ -26,7 +26,7 @@ public class MainShipAuthoring : MonoBehaviour {
             AddComponent<FireBulletTag>(ent);
             SetComponentEnabled<FireBulletTag>(ent , false);
             
-            AddComponent(ent , new BulletPrefab {
+            AddComponent(ent , new BulletEntity {
                 Value = GetEntity(authoring.bulletPrefab, TransformUsageFlags.Dynamic)
             });
 

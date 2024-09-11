@@ -14,7 +14,8 @@ namespace ECS_Lecture.Scripts.Projectile {
             foreach (var (transform, movespeed) 
                      in SystemAPI.Query<RefRW<LocalTransform>, ProjectileMoveSpeed>())
             {
-                transform.ValueRW.Position += transform.ValueRO.Up() * movespeed.Value * deltaTime;
+                transform.ValueRW.Position += 
+                    transform.ValueRO.Up() * movespeed.Value * deltaTime;
             }
         }
     }

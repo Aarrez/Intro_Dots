@@ -24,5 +24,4 @@ namespace ECS_Lecture.Scripts {
             }
         }
     }
-
 }
