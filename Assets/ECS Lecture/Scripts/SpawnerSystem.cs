@@ -5,10 +5,6 @@ using Unity.Transforms;
 namespace ECS_Lecture.Scripts {
     public partial struct SpawnerSystem : ISystem
     {
-        public void OnCreate(ref SystemState state) { }
-    
-        public void OnDestroy(ref SystemState state) { }
-    
         public void OnUpdate(ref SystemState state)
         {
             foreach (RefRW<Spawner> spawner in SystemAPI.Query<RefRW<Spawner>>())

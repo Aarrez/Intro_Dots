@@ -44,6 +44,15 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpawnKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a263d0f-9dee-4395-ac86-0e6be84d8b41"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -110,6 +119,17 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Space"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a19bc65-82d4-4a14-ae9a-4786c5d2b9a2"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SpawnKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -207,6 +227,7 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_WASD = m_Player.FindAction("WASD", throwIfNotFound: true);
         m_Player_Space = m_Player.FindAction("Space", throwIfNotFound: true);
+        m_Player_SpawnKey = m_Player.FindAction("SpawnKey", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_MousePos = m_UI.FindAction("Mouse Pos", throwIfNotFound: true);
@@ -275,12 +296,14 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_WASD;
     private readonly InputAction m_Player_Space;
+    private readonly InputAction m_Player_SpawnKey;
     public struct PlayerActions
     {
         private @InputActionMapper m_Wrapper;
         public PlayerActions(@InputActionMapper wrapper) { m_Wrapper = wrapper; }
         public InputAction @WASD => m_Wrapper.m_Player_WASD;
         public InputAction @Space => m_Wrapper.m_Player_Space;
+        public InputAction @SpawnKey => m_Wrapper.m_Player_SpawnKey;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -296,6 +319,9 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
             @Space.started += instance.OnSpace;
             @Space.performed += instance.OnSpace;
             @Space.canceled += instance.OnSpace;
+            @SpawnKey.started += instance.OnSpawnKey;
+            @SpawnKey.performed += instance.OnSpawnKey;
+            @SpawnKey.canceled += instance.OnSpawnKey;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -306,6 +332,9 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
             @Space.started -= instance.OnSpace;
             @Space.performed -= instance.OnSpace;
             @Space.canceled -= instance.OnSpace;
+            @SpawnKey.started -= instance.OnSpawnKey;
+            @SpawnKey.performed -= instance.OnSpawnKey;
+            @SpawnKey.canceled -= instance.OnSpawnKey;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -398,6 +427,7 @@ public partial class @InputActionMapper: IInputActionCollection2, IDisposable
     {
         void OnWASD(InputAction.CallbackContext context);
         void OnSpace(InputAction.CallbackContext context);
+        void OnSpawnKey(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

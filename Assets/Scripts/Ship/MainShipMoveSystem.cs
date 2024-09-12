@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 [UpdateBefore(typeof(TransformSystemGroup))]
+
 public partial struct MainShipMoveSystem : ISystem {
 
     [BurstCompile]

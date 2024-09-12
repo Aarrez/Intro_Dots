@@ -6,10 +6,10 @@ using UnityEngine;
 
 [UpdateInGroup(typeof(SimulationSystemGroup))]
 [UpdateBefore(typeof(TransformSystemGroup))]
+[RequireMatchingQueriesForUpdate]
 public partial struct FireBulletSystem : ISystem {
     
     public void OnUpdate(ref SystemState state) {
-        
         var ecb = new EntityCommandBuffer(Allocator.Temp);
         foreach (var (bulletPrefab, transform) 
                  in SystemAPI.Query<BulletEntity, LocalTransform>().WithAll<FireBulletTag>()) {
@@ -33,4 +33,13 @@ public partial struct FireBulletSystem : ISystem {
             if (lifeTime <= 0) break;
         }
     }
+}
+
+public partial struct BulletLifeTimeJob : IJobEntity {
+    public EntityCommandBuffer ecb;
+
+    private void Execute(ref BulletLifeTime lifeTime) {
+        
+    }
+
 }

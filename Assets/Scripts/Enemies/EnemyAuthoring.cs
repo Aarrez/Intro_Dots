@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class EnemyAuthoring : MonoBehaviour {
-    [SerializeField] private Transform[] waypoints = new Transform[3];
+    [SerializeField] private Vector2[] waypoints = new Vector2[3];
     [SerializeField] private int enemyHealth = 100;
     [SerializeField] private float enemySpeed = 10f;
 
@@ -16,8 +16,8 @@ public class EnemyAuthoring : MonoBehaviour {
             float2x3 temp = new float2x3();
             for (int i = 0; i < authoring.waypoints.Length-1; i++) {
                 temp[i] = new float2(
-                    authoring.waypoints[i].position.x,
-                    authoring.waypoints[i].position.y); 
+                    authoring.waypoints[i].x,
+                    authoring.waypoints[i].y); 
             }
             AddComponent(ent, new EnemyMovePoints {
                 points = temp
@@ -30,28 +30,6 @@ public class EnemyAuthoring : MonoBehaviour {
             });
             AddComponent(ent, new EnemyEntity {
                 Prefab = GetEntity(authoring, TransformUsageFlags.Dynamic)
-            });
-        }
-    }
-}
-
-public class EnemySpawnerAuthoring : MonoBehaviour {
-    [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private float spawnRate = 2f;
-    [SerializeField] private float CurrentSpawnTime;
-
-    public class EnemySpawnerAuthoringBaker :
-        Baker<EnemySpawnerAuthoring> {
-        public override void Bake(EnemySpawnerAuthoring authoring) {
-            var ent = GetEntity(TransformUsageFlags.WorldSpace);
-            
-            AddComponent(ent, new EnemySpawner {
-                prefab = GetEntity(authoring.enemyPrefab, TransformUsageFlags.WorldSpace),
-                spawnRate = authoring.spawnRate,
-                CurrentSpawnTime = 0,
-                startPosition = 
-                    new float2(authoring.transform.position.x, 
-                        authoring.transform.position.y)
             });
         }
     }

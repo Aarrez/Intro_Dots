@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
-public partial class MainShipInputSystem : SystemBase {
+public partial class MyInputSystem : SystemBase {
     private InputActionMapper mapper;
     private Entity player;
+    private Entity spawner;
     
     protected override void OnCreate() {
         RequireForUpdate<MainShipTag>();
@@ -21,9 +22,19 @@ public partial class MainShipInputSystem : SystemBase {
         mapper.Player.WASD.performed += OnMove;
         mapper.Player.WASD.canceled += OnMove;
 
+        mapper.Player.SpawnKey.performed += OnSpawn;
+
         mapper.UI.MousePos.performed += OnMousePosChanged;
         
         player = SystemAPI.GetSingletonEntity<MainShipTag>();
+        spawner = SystemAPI.GetSingletonEntity<EnemySpawnerTag>();
+    }
+
+    private void OnSpawn(InputAction.CallbackContext obj) {
+        if(!SystemAPI.Exists(spawner)) return;
+        Debug.Log("Happening");
+        //TODO Look into EntityQueryDesc and se how to query for a disabled entity
+        SystemAPI.SetComponentEnabled<EnemySpawner>(spawner, true);
     }
 
     private void OnMove(InputAction.CallbackContext ctx) {
