@@ -1,8 +1,11 @@
-﻿using Unity.Entities;
+﻿using Unity.Burst;
+using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+[UpdateInGroup(typeof(SimulationSystemGroup), OrderLast = true)]
 public partial struct EnemyMoveSystem : ISystem{
     public void OnUpdate(ref SystemState state) {
         new EnemyMoveJob {
@@ -22,19 +25,30 @@ public partial struct EnemyDestroySystem : ISystem {
 }
 
 
-
+[BurstCompile]
 public partial struct EnemyMoveJob : IJobEntity {
     
     public float DeltaTime;
-    //TODO Make the Enemy move in between the EnemyMovePoints
     private void Execute(
         ref LocalTransform localTransform,
         in EnemyMovePoints movePoints,
-        in EnemyCurrentPoint currentPoint,
+        ref EnemyCurrentPoint currentPoint,
         EnemySpeed enemySpeed) {
-        var dir = movePoints.points[(int)currentPoint.CurrentWayPoint] - localTransform.Position;
+        
+        float3 point = movePoints.points[(int)currentPoint.CurrentWayPoint];
+        float3 closeToPoint = point * 0.9f;
+        bool3 variable = localTransform.Position >= closeToPoint;
+        if (variable is { x: true, y: true }) {
+            currentPoint.CurrentWayPoint++;
+            point = movePoints.points[(int)currentPoint.CurrentWayPoint];
+            if ((int)currentPoint.CurrentWayPoint == 2) return;
+            
+        }
+        var dir = point - localTransform.Position;
         math.normalize(dir);
-        localTransform.Position +=  dir * enemySpeed.Value * DeltaTime ;
+        localTransform.Position += dir * enemySpeed.Value * DeltaTime;
+        
+        
 
     }
 }

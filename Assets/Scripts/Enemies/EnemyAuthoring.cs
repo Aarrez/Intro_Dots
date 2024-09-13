@@ -1,4 +1,5 @@
 ﻿using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -16,8 +17,7 @@ public class EnemyAuthoring : MonoBehaviour {
             AddComponent<EnemyTag>(ent);
             AddComponent<EnemyCurrentPoint>(ent);
             FixedList128Bytes<float3> temp = new FixedList128Bytes<float3>();
-            
-            for (int i = 0; i < authoring.waypoints.Length-1; i++) {
+            for (int i = 0; i < authoring.waypoints.Length; i++) {
                 temp.Add(new float3(authoring.waypoints[i].x, 
                     authoring.waypoints[i].y, 0f));
             }
