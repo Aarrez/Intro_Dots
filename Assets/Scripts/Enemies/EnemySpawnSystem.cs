@@ -1,35 +1,43 @@
 ﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Transforms;
+using UnityEngine.Events;
 
 [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
 public partial struct EnemySpawnSystem : ISystem {
+    private EntityManager entityManager;
+    public static UnityAction<EnemySpawner> SpawnEnemy;
 
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state) {
-        foreach (var spawner in SystemAPI.Query<EnemySpawner>().WithAll<EnemySpawnerTag>()) {
-            new EnemySpawnJob {
-                Spawner = spawner,
-                DeltaTime = SystemAPI.Time.DeltaTime,
-                Manager = state.EntityManager
-            }.ScheduleParallel();
-        }
+    public void OnCreate(ref SystemState state) {
+        SpawnEnemy += OnSpawnEnemy;
+    }
+
+    private void OnSpawnEnemy(EnemySpawner spawner) {
+        var world = World.DefaultGameObjectInjectionWorld;
+        entityManager = world.EntityManager;
+        var Ecb = new EntityCommandBuffer(Allocator.Temp);
+        
+        var ent = Ecb.Instantiate(spawner.Enemy);
+        Ecb.SetComponent(ent, 
+            LocalTransform.FromPosition(spawner.SpawnPosition));
+        
+        Ecb.Playback(entityManager);
+        Ecb.Dispose();
+    }
+
+    public void OnDestroy(ref SystemState state) {
+        SpawnEnemy -= OnSpawnEnemy;
     }
 } 
 
 [BurstCompile]
 public partial struct EnemySpawnJob : IJobEntity {
-    public float DeltaTime;
     public EnemySpawner Spawner;
     public EntityCommandBuffer Ecb;
     public Entity[] Entities;
     public EntityManager Manager;
     private void Execute() {
-        Ecb = new EntityCommandBuffer(Allocator.Temp);
         
-        var entity = Ecb.Instantiate(Spawner.Enemy);
-        
-        Ecb.Playback(Manager);
-        Ecb.Dispose();
     }
 }

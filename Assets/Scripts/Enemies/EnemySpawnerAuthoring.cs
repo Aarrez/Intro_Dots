@@ -14,12 +14,14 @@ public class EnemySpawnerAuthoring : MonoBehaviour {
             var ent = GetEntity(TransformUsageFlags.WorldSpace);
             
             AddComponent(ent, new EnemySpawner {
-                Enemy = GetEntity(authoring.enemyPrefab, TransformUsageFlags.WorldSpace),
+                Enemy = GetEntity(authoring.enemyPrefab, TransformUsageFlags.Dynamic),
+                SpawnPosition = new float3(
+                    authoring.transform.position.x, 
+                    authoring.transform.position.y, 0),
                 SpawnRate = authoring.spawnRate,
                 CurrentSpawnTime = 0,
                 SpawnCount = authoring.spawnCount
             });
-            SetComponentEnabled<EnemySpawner>(ent, false);
             
             AddComponent<EnemySpawnerTag>(ent);
         }

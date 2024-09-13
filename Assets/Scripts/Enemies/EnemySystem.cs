@@ -1,13 +1,13 @@
 ﻿using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 public partial struct EnemyMoveSystem : ISystem{
     public void OnUpdate(ref SystemState state) {
-        float deltaTime = SystemAPI.Time.DeltaTime;
-        /*new EnemyMoveJob
-        {
-            DeltaTime = deltaTime
-        }.Schedule();*/
+        new EnemyMoveJob {
+            DeltaTime = SystemAPI.Time.DeltaTime,
+        }.Schedule();
     }
 }
 
@@ -28,8 +28,13 @@ public partial struct EnemyMoveJob : IJobEntity {
     public float DeltaTime;
     //TODO Make the Enemy move in between the EnemyMovePoints
     private void Execute(
-        ref LocalTransform transform,
-        in EnemyMovePoints points,
-        EnemySpeed speed) {
+        ref LocalTransform localTransform,
+        in EnemyMovePoints movePoints,
+        in EnemyCurrentPoint currentPoint,
+        EnemySpeed enemySpeed) {
+        var dir = movePoints.points[(int)currentPoint.CurrentWayPoint] - localTransform.Position;
+        math.normalize(dir);
+        localTransform.Position +=  dir * enemySpeed.Value * DeltaTime ;
+
     }
 }

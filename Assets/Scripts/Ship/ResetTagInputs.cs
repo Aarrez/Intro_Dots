@@ -13,11 +13,6 @@ public partial struct ResetTagInputs : ISystem {
                  SystemAPI.Query<FireBulletTag>().WithEntityAccess()) {
             ecb.SetComponentEnabled<FireBulletTag>(entity, false);
         }
-
-        foreach (var (tag, entity) in
-                 SystemAPI.Query<EnemySpawnerTag>().WithEntityAccess()) {
-            ecb.SetComponentEnabled<EnemySpawner>(entity, false);
-        }
         ecb.Playback(state.EntityManager);
         ecb.Dispose();
     }

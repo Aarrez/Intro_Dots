@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -13,12 +14,14 @@ public class EnemyAuthoring : MonoBehaviour {
             var ent = GetEntity(TransformUsageFlags.Dynamic);
 
             AddComponent<EnemyTag>(ent);
-            float2x3 temp = new float2x3();
+            AddComponent<EnemyCurrentPoint>(ent);
+            FixedList128Bytes<float3> temp = new FixedList128Bytes<float3>();
+            
             for (int i = 0; i < authoring.waypoints.Length-1; i++) {
-                temp[i] = new float2(
-                    authoring.waypoints[i].x,
-                    authoring.waypoints[i].y); 
+                temp.Add(new float3(authoring.waypoints[i].x, 
+                    authoring.waypoints[i].y, 0f));
             }
+            
             AddComponent(ent, new EnemyMovePoints {
                 points = temp
             });

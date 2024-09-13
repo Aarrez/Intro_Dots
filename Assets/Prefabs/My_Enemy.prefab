@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints:
-  - {x: 10, y: 10}
-  - {x: -10, y: 10}
-  - {x: 10, y: -10}
+  - {x: 4, y: 4}
+  - {x: -4, y: 4}
+  - {x: 4, y: -4}
   enemyHealth: 100
-  enemySpeed: 10
+  enemySpeed: 1

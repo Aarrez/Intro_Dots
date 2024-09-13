@@ -1,7 +1,9 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
-public struct EnemySpawner : IComponentData, IEnableableComponent {
+public struct EnemySpawner : IComponentData {
     public Entity Enemy;
+    public float3 SpawnPosition;
     public int SpawnCount;
     public float SpawnRate;
     public float CurrentSpawnTime;
@@ -10,7 +12,17 @@ public struct EnemySpawner : IComponentData, IEnableableComponent {
 public struct EnemySpawnerTag : IComponentData { }
 
 public struct EnemyMovePoints : IComponentData {
-    public float2x3 points;
+    public FixedList128Bytes<float3> points;
+}
+
+public enum WayPoints {
+    fist = 0,
+    second = 1,
+    thid = 2
+}
+
+public struct EnemyCurrentPoint : IComponentData {
+    public WayPoints CurrentWayPoint;
 }
 
 public struct EnemyEntity : IComponentData {
