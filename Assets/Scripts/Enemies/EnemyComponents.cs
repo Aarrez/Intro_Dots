@@ -18,7 +18,8 @@ public struct EnemyMovePoints : IComponentData {
 public enum WayPoints {
     Fist = 0,
     Second = 1,
-    Third = 2
+    Third = 2,
+    Complete = 3
 }
 
 public struct EnemyCurrentPoint : IComponentData {
