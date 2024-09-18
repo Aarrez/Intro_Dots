@@ -16,30 +16,28 @@ public partial struct FireBulletSystem : ISystem {
             var newBullet = ecb.Instantiate(bulletPrefab.Value);
             var bulletTransform = 
                 LocalTransform.FromPositionRotation(transform.Position, transform.Rotation);
+            
             ecb.SetComponent(newBullet, bulletTransform);
-            /*var lifetime = SystemAPI.GetComponent<BulletLifeTime>(newBullet);*/
-            /*_ = DestroyBullets(newBullet, ecb, 10f);*/
-            // TODO Look into Add components to an entity in the unity docs to se how to add BulletLifetime component to newBullet entity
         }
         ecb.Playback(state.EntityManager);
         ecb.Dispose();
     }
-    
-    private async UniTaskVoid DestroyBullets
-        (float lifeTime) {
-        while (true) {
-            lifeTime -= Time.fixedDeltaTime;
-            await UniTask.Yield(PlayerLoopTiming.Update);
-            if (lifeTime <= 0) break;
-        }
-    }
 }
 
-public partial struct BulletLifeTimeJob : IJobEntity {
-    public EntityCommandBuffer ecb;
 
-    private void Execute(ref BulletLifeTime lifeTime) {
-        
+
+[UpdateInGroup(typeof(SimulationSystemGroup), OrderLast = true)]
+[RequireMatchingQueriesForUpdate]
+public partial struct BulletLifeTimeSystem : ISystem {
+
+    private float currentTime;
+    public void OnUpdate(ref SystemState state) {
+        var ecb = new EntityCommandBuffer(Allocator.Temp);
+        foreach (var (tag, entity) in 
+                 SystemAPI.Query<RefRW<BulletTag>>().WithDisabled<BulletTag>().WithEntityAccess()) {
+            ecb.DestroyEntity(entity); 
+        }
+        ecb.Playback(state.EntityManager);
+        ecb.Dispose();
     }
-
 }

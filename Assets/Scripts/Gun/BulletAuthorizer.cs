@@ -13,6 +13,7 @@ public class BulletAuthorizer : MonoBehaviour {
             Entity ent = GetEntity(TransformUsageFlags.Dynamic);
             
             AddComponent<FireBulletTag>(ent);
+            AddComponent<BulletTag>(ent);
 
             AddComponent(ent, new BulletMoveSpeed {
                 Value = authoring.speed
@@ -21,7 +22,7 @@ public class BulletAuthorizer : MonoBehaviour {
                 Value = authoring.damage
             });
             AddComponent(ent, new BulletLifeTime {
-                Value = authoring.lifeTime
+                Current = authoring.lifeTime
             });
             
             AddComponent(ent, new BulletEntity{

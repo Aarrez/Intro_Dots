@@ -3,8 +3,9 @@
 public struct FireBulletTag : 
     IComponentData, IEnableableComponent { }
 
-public struct BulletEntity : IComponentData
-{
+public struct BulletTag : IComponentData, IEnableableComponent{ }
+
+public struct BulletEntity : IComponentData {
     public Entity Value;
 }
 
@@ -13,7 +14,7 @@ public struct BulletMoveSpeed : IComponentData {
 }
 
 public struct BulletLifeTime : IComponentData {
-    public float Value;
+    public float Current;
 }
 
 public struct BulletDamage : IComponentData {
