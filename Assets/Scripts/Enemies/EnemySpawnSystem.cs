@@ -30,14 +30,3 @@ public partial struct EnemySpawnSystem : ISystem {
         SpawnEnemy -= OnSpawnEnemy;
     }
 } 
-
-[BurstCompile]
-public partial struct EnemySpawnJob : IJobEntity {
-    public EnemySpawner Spawner;
-    public EntityCommandBuffer Ecb;
-    public Entity[] Entities;
-    public EntityManager Manager;
-    private void Execute() {
-        
-    }
-}

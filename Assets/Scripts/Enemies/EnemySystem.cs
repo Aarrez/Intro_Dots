@@ -15,8 +15,8 @@ public partial struct EnemyMoveSystem : ISystem {
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<EnemyTag>();
     }
-
-    //TODO Figure out how to destroy entites
+    
+    [BurstCompile]
     public void OnUpdate(ref SystemState state) {
         foreach (var (transform, movePoints, currentPoint, speed, tag, entity) in 
                  SystemAPI.Query<RefRW<LocalTransform>, RefRO<EnemyMovePoints>, RefRW<EnemyCurrentPoint>, RefRO<EnemySpeed>, RefRW<EnemyTag>>().WithEntityAccess() ) {
@@ -59,6 +59,7 @@ public partial struct EnemyMoveSystem : ISystem {
 [UpdateAfter(typeof(LateSimulationSystemGroup))]
 [RequireMatchingQueriesForUpdate]
 public partial struct EnemyDestroySystem : ISystem {
+    [BurstCompile]
     public void OnUpdate(ref SystemState state) {
         var ecb = new EntityCommandBuffer(Allocator.Persistent);
         foreach (var (tag, entity) in SystemAPI.Query<EnemyTag>().WithDisabled<EnemyTag>().WithEntityAccess()) {
